@@ -13,6 +13,18 @@ As seguintes dependências para o projeto são necessárias:
 
 - Crie 1 banco de dados de acordo com as configurações contindas em: src/main/resources/application.properties
 
+
+#### Excecutando ####
+
+- Compile a aplicação utilizando o comando do maven na pasta raiz da aplicação
+-  "mvn clean install".
+-  Suba o seu servidor de aplicação e faça o deploy do pacote gerado na pasta target.
+-  Assim que o deploy for finalizado, o sistema já pode ser utilizado.
+ 
+#### Front-End exemplo ####
+
+A aplicação acompanha um front-end de exemplo onde após o sistema estar rodando,pode ser acessado através da url "http://localhost:880/"(supondo que rode o servidor de aplicação em "localhost:8080").
+
 #### API REST ####
 
 A aplicação REST do servidor expõe os seguintes serviços:
