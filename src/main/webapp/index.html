@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>XY Inc Teste Zup</title>
+<meta name="description"
+	content="app, web app, responsive, admin dashboard, admin, flat, flat ui, ui kit, off screen nav" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1" />
+<link rel="stylesheet" href="css/bootstrap.css" type="text/css" />
+<link rel="stylesheet" href="css/animate.css" type="text/css" />
+<link rel="stylesheet" href="css/font-awesome.min.css" type="text/css" />
+<link rel="stylesheet" href="css/font.css" type="text/css" cache="false" />
+<link rel="stylesheet" href="css/plugin.css" type="text/css" />
+<link rel="stylesheet" href="css/app.css" type="text/css" />
+<!--[if lt IE 9]>
+    <script src="js/ie/respond.min.js" cache="false"></script>
+    <script src="js/ie/html5.js" cache="false"></script>
+    <script src="js/ie/fix.js" cache="false"></script>
+  <![endif]-->
+</head>
+<body>
+	<section class="vbox">
+		<header class="header bg-black navbar navbar-inverse pull-in">
+			<div class="navbar-header nav-bar aside dk">
+				<a class="btn btn-link visible-xs" data-toggle="class:show"
+					data-target=".nav-primary"> <i class="icon-reorder"></i>
+				</a> <a href="/" class="nav-brand" data-toggle="fullscreen"><img
+					src="images/logo.png"></a> <a class="btn btn-link visible-xs"
+					data-toggle="collapse" data-target=".navbar-collapse"> <i
+					class="icon-comment-alt"></i>
+				</a>
+			</div>
+		</header>
+		<section>
+			<section class="hbox stretch">
+				<aside class="aside bg-light lter b-r" id="nav">
+					<nav class="nav-primary hidden-xs">
+						<ul class="nav">
+							<li ><a href="/"> <i
+									class="icon-map-marker"></i> <span>Pontos de Interesse</span>
+							</a>
+								</li>
+
+						</ul>
+					</nav>
+				</aside>
+				<section>
+					<div class="wrapper" id="conteudo">
+
+
+
+
+						<section class="panel">
+							<header class="panel-heading"> Pontos de Interesse </header>
+							<div class="row text-sm wrapper">
+							
+							
+							<div class="col-sm-4 ">
+			                    <button class="btn btn-s-md btn-default" type="button"
+												onclick="findAll()">Listar Todos</button>               
+			                  </div>
+							
+							
+							
+								<div class="col-sm-4">
+									<div class="input-group">
+										<input type="text" class="input-sm form-control" id="pX"
+											placeholder="Coord X"> <input type="text"
+											class="input-sm form-control" id="pY" placeholder="Coord Y">
+										<input type="text" class="input-sm form-control" id="distance"
+											placeholder="Distancia Maxima"> <span
+											class="input-group-btn">
+											<button class="btn btn-sm btn-white" type="button"
+												onclick="findByProximity()">Pesquisar Por Proximidade</button>
+										</span>
+									</div>
+									
+									             
+								</div>
+								<div class="col-sm-4">
+									<div class="input-group">
+									<input type="text" class="input-sm form-control" id="pontoNome"
+											placeholder="Nome">
+										<input type="text" class="input-sm form-control" id="pontoX"
+											placeholder="Coord X"> 
+										<input type="text"
+											class="input-sm form-control" id="pontoY" placeholder="Coord Y">
+										 <span
+											class="input-group-btn">
+											<button class="btn btn-sm btn-white" type="button"
+												onclick="addPoi()">Cadastrar Ponto de Interesse</button>
+										</span>
+									</div>
+									
+									             
+								</div>
+							</div>
+							<div class="table-responsive">
+								<table class="table table-striped b-t text-sm">
+									<thead>
+										<tr>
+											<th width="30px">ID</th>
+											<th class="th-sortable" data-toggle="class">Nome <span
+												class="th-sort"> <i class="icon-sort-down text"></i>
+													<i class="icon-sort-up text-active"></i> <i
+													class="icon-sort"></i>
+											</span>
+											</th>
+											<th>Coord. X</th>
+											<th>Coord. Y</th>
+										</tr>
+									</thead>
+									<tbody id="tbpoi">
+										
+
+									</tbody>
+								</table>
+							</div>
+						</section>
+
+
+						<script>
+							function limparTabela() {
+								$("#tbpoi").html('');
+							}
+
+							function findByProximity() {
+								limparTabela();
+								var x = $("#pX").val();
+								var y = $("#pY").val();
+								var distance = $("#distance").val();
+								$.getJSON(
+										"/rest/pontos-de-interesses/proximidade?pX="
+												+ x + "&pY=" + y + "&distance="
+												+ distance, {
+											format : "json"
+										}).done(
+										function(data) {
+
+											var items = [];
+											$.each(data, function(id, obj) {
+												items.push("<tr><td>" + obj.id
+														+ "</td><td>"
+														+ obj.nome
+														+ "</td><td>" + obj.x
+														+ "</td><td>" + obj.y
+														+ "</td></tr>");
+											});
+
+											$("#tbpoi").append(items.join(""));
+										});
+
+							}
+
+							function findAll() {
+								limparTabela();
+								$.getJSON("/rest/pontos-de-interesses", {
+									format : "json"
+								}).done(
+										function(data) {
+
+											var items = [];
+											$.each(data, function(id, obj) {
+												items.push("<tr><td>" + obj.id
+														+ "</td><td>"
+														+ obj.nome
+														+ "</td><td>" + obj.x
+														+ "</td><td>" + obj.y
+														+ "</td></tr>");
+											});
+
+											$("#tbpoi").append(items.join(""));
+										});
+
+							}
+							
+							
+							function addPoi(){
+								var nome = $("#pontoNome").val();
+								var x = $("#pontoX").val();
+								var y = $("#pontoY").val();
+								alert("oi");
+								var data = '[{'+
+									'"nome":"'+nome+'",'+
+									'"x":'+x+','+
+									'"y":'+y+
+									"}]";
+								
+								
+								var obj = JSON.parse(data);
+								alert(obj);
+								$.ajax({
+								    url: "/rest/pontos-de-interesses",
+								    type: "POST",
+								    data: data,
+								    contentType: "application/json",
+								    sucess: function(dados){
+								    	
+								    }
+								    
+								});
+	
+								findAll();
+							}
+							
+							
+						</script>
+
+					</div>
+				</section>
+			</section>
+		</section>
+
+	</section>
+	<script src="js/jquery.min.js"></script>
+	<!-- Bootstrap -->
+	<script src="js/bootstrap.js"></script>
+	<!-- Sparkline Chart -->
+	<script src="js/charts/sparkline/jquery.sparkline.min.js"></script>
+	<!-- App -->
+	<script src="js/app.js"></script>
+	<script src="js/app.plugin.js"></script>
+	<script src="js/app.data.js"></script>
+
+	<!-- Sparkline Chart -->
+	<script src="js/charts/sparkline/jquery.sparkline.min.js"></script>
+	<!-- Easy Pie Chart -->
+	<script src="js/charts/easypiechart/jquery.easy-pie-chart.js"></script>
+	<!-- Morris -->
+	<script src="js/charts/morris/raphael-min.js" cache="false"></script>
+	<script src="js/charts/morris/morris.min.js" cache="false"></script>
+
+
+</body>
+</html>
